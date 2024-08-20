@@ -1,0 +1,12 @@
+SRC = writer.c
+TARGET = writer
+CC = $(CROSS_COMPILE)gcc
+
+all: $(TARGET)
+
+#build from source
+$(TARGET) : $(SRC) 
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
+
+clean: 
+	rm -f $(TARGET) *.o
