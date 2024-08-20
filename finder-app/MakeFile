@@ -9,4 +9,4 @@ $(TARGET) : $(SRC)
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
 
 clean: 
-	rm -f $(TARGET) *.o
+	rm -f $(TARGET) *.0
