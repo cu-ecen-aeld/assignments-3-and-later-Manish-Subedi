@@ -24,7 +24,7 @@ int main(int argc, char **argv){
         fclose(fp);
         return 1;
     }
-    syslog(LOG_DEBUG, "Writing %s to %s", string, filename);
+    syslog(LOG_DEBUG, "Writing %s to %s", string, filename); // log successful write
 
     if(fclose(fp) != 0){
         syslog(LOG_ERR, "Error closing the file: %s", filename);
