@@ -5,7 +5,7 @@
 
 int main(int argc, char **argv){
     openlog("writer_a2", 0, LOG_USER);
-    if(argc != 3){
+    if(argc != 3){  // check for the correct number of arguments 
         syslog(LOG_ERR, "Invalid argument counts: %d", argc-1);
         return 1; 
     }
@@ -19,7 +19,7 @@ int main(int argc, char **argv){
         return 1; 
     }
     
-    if (fprintf(fp, "%s", string) < 0){
+    if (fprintf(fp, "%s", string) < 0){  // returns negative if failed 
         syslog(LOG_ERR, "Error writing to file: %s", filename);
         fclose(fp);
         return 1;
