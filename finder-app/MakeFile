@@ -4,11 +4,13 @@ TARGET = writer
 CROSS_COMPILE ?=
 CC := $(CROSS_COMPILE)gcc
 
+.PHONY: all
 all: $(TARGET)
 
 #build from source
 $(TARGET) : $(SRC) 
 	$(CC) -o $(TARGET) $(SRC)
 
+.PHONY: clean
 clean: 
 	rm -f $(TARGET) *.0
