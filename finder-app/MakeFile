@@ -1,16 +1,17 @@
-SRC = writer.c
-TARGET = writer
-
 CROSS_COMPILE ?=
-CC := $(CROSS_COMPILE)gcc
 
-.PHONY: all
-all: $(TARGET)
+ifdef CROSS_COMPILE
+    CC := $(CROSS_COMPILE)gcc
+else
+    CC := gcc
+endif
 
-#build from source
-$(TARGET) : $(SRC) 
-	$(CC) -o $(TARGET) $(SRC)
+TARGET := writer
+SRC := writer.c
+CFLAGS := -Wall -O2
 
-.PHONY: clean
-clean: 
-	rm -f $(TARGET) *.0
+$(TARGET): $(SRC)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
+
+clean:
+	rm -f $(TARGET)
