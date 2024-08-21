@@ -1,13 +1,17 @@
-CC := gcc
-ifdef CROSS_COMPILE
-    CC := $(CROSS_COMPILE)gcc
-endif
-
-TARGET = writer
+all: writer
 SRC = writer.c
+OBJ = writer.o
+CROSS_COMPILE ?=
 
-$(TARGET): $(SRC)
-	$(CC) $(SRC) -o $(TARGET) 
+CC = $(CROSS_COMPILE)gcc
+CFLAGS = -Wall -Werror
+
+LDFLAGS = 
+writer: $(OBJ)
+		$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+
+$(OBJ): $(SRC)
+		$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(TARGET)
+		rm -f writer $(OBJ)
