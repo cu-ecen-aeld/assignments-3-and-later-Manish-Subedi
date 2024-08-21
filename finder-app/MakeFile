@@ -1,17 +1,9 @@
-all: writer
-SRC = writer.c
-OBJ = writer.o
-CROSS_COMPILE ?=
+.PHONY: all clean
 
-CC = $(CROSS_COMPILE)gcc
-CFLAGS = -Wall -Werror
+COMPILE:=${CROSS_COMPILE}gcc
 
-LDFLAGS = 
-writer: $(OBJ)
-		$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
-
-$(OBJ): $(SRC)
-		$(CC) $(CFLAGS) -c $< -o $@
+all:
+	${COMPILE} -o writer writer.c
 
 clean:
-		rm -f writer $(OBJ)
+	rm -rf writer
