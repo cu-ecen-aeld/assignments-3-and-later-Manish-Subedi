@@ -6,9 +6,8 @@ else
     CC := gcc
 endif
 
-TARGET := writer
-SRC := writer.c
-CFLAGS := -Wall -O2
+TARGET = writer
+SRC = writer.c
 
 $(TARGET): $(SRC)
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
