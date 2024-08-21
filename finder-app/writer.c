@@ -2,7 +2,7 @@
 #include <syslog.h>
 #include <string.h>
 #include <stdlib.h>
-
+/*enter main*/
 int main(int argc, char **argv){
     openlog("writer_a2", 0, LOG_USER);
     if(argc != 3){  // check for the correct number of arguments 
