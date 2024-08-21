@@ -1,16 +1,13 @@
-CROSS_COMPILE ?=
-
+CC := gcc
 ifdef CROSS_COMPILE
     CC := $(CROSS_COMPILE)gcc
-else
-    CC := gcc
 endif
 
 TARGET = writer
 SRC = writer.c
 
 $(TARGET): $(SRC)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
+	$(CC) $(SRC) -o $(TARGET) 
 
 clean:
 	rm -f $(TARGET)
