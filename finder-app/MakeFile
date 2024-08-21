@@ -1,9 +1,22 @@
-.PHONY: all clean
+# Set CROSS_COMPILE variable to specify the cross-compilation prefix (can be overridden on the command line)
+CROSS_COMPILE ?=
 
-COMPILE:=${CROSS_COMPILE}gcc
+# Conditionally define the compiler
+ifdef CROSS_COMPILE
+    CC := $(CROSS_COMPILE)gcc
+else
+    CC := gcc
+endif
 
-all:
-	${COMPILE} -o writer writer.c
+# Define other variables
+TARGET := writer
+SRC := writer.c
+CFLAGS := -Wall -O2
 
+# Default target to build the application
+$(TARGET): $(SRC)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
+
+# Clean target to remove build artifacts
 clean:
-	rm -rf writer
+	rm -f $(TARGET) *.o
