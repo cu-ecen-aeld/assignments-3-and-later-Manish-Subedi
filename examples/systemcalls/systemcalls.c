@@ -16,8 +16,9 @@ bool do_system(const char *cmd)
  *   and return a boolean true if the system() call completed with success
  *   or false() if it returned a failure
 */
-
-    return true;
+    int ret = system(cmd); 
+    if (ret == 0) return true;
+    else return false;
 }
 
 /**
@@ -47,7 +48,7 @@ bool do_exec(int count, ...)
     command[count] = NULL;
     // this line is to avoid a compile warning before your implementation is complete
     // and may be removed
-    command[count] = command[count];
+    //command[count] = command[count];
 
 /*
  * TODO:
@@ -58,7 +59,35 @@ bool do_exec(int count, ...)
  *   as second argument to the execv() command.
  *
 */
-
+    __pid_t pid; 
+    int status; 
+    fflush(stdout); 
+    pid = fork();
+    if (pid < 0) {
+        printf("fork failed with error: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+    else if (pid == 0) { // fork() returns 0 in child process       
+        printf("child process (PID : %d) executing command... \n", getpid());
+        if (execv( command[0], command) == -1){
+            printf("execv failed with error: %s\n", strerror(errno));
+            exit(EXIT_FAILURE);
+        }
+    }
+    else {
+        int status; 
+        printf("Parent process (pid : %d) waiting for child to complete\n", getpid());
+        if (waitpid(pid, &status, 0) == -1){
+            perror("waitpid failed");
+            exit(EXIT_FAILURE);
+        }
+        if (WIFEXITED(status)){
+            printf("Child exited with status: %d\n", WEXITSTATUS(status));
+        }
+        else {
+            printf("Child process did not exit successfully\n");
+        }
+    }
     va_end(args);
 
     return true;
@@ -82,7 +111,7 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
     command[count] = NULL;
     // this line is to avoid a compile warning before your implementation is complete
     // and may be removed
-    command[count] = command[count];
+    //command[count] = command[count];
 
 
 /*
@@ -92,7 +121,7 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *   The rest of the behaviour is same as do_exec()
  *
 */
-
+    
     va_end(args);
 
     return true;
