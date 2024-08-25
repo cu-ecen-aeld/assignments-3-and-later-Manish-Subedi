@@ -64,13 +64,13 @@ bool do_exec(int count, ...)
     fflush(stdout); 
     pid = fork();
     if (pid < 0) {
-        printf("fork failed with error: %s\n", strerror(errno));
-        exit(EXIT_FAILURE);
+        perror("fork failed");
+        exit(EXIT_FAILURE);     
     }
     else if (pid == 0) { // fork() returns 0 in child process       
         printf("child process (PID : %d) executing command... \n", getpid());
         if (execv( command[0], command) == -1){
-            printf("execv failed with error: %s\n", strerror(errno));
+            perror("execv failed with error");
             exit(EXIT_FAILURE);
         }
     }
@@ -121,7 +121,7 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *   The rest of the behaviour is same as do_exec()
  *
 */
-    
+
     va_end(args);
 
     return true;
