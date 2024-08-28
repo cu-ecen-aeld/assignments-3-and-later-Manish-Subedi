@@ -66,6 +66,11 @@ bool do_exec(int count, ...)
     }
     else if (pid == 0) { // fork() returns 0 in child process       
         printf("child process (PID : %d) executing command... \n", getpid());
+        printf("Executing command: %s\n", command[0]);
+        for (int i = 0; command[i] != NULL; i++) {
+            printf("Arg[%d]: %s\n", i, command[i]);
+        }
+
         if (execv( command[0], command) == -1){
             perror("execv failed with error");
             //exit(EXIT_FAILURE);
