@@ -46,9 +46,6 @@ bool do_exec(int count, ...)
         command[i] = va_arg(args, char *);
     }
     command[count] = NULL;
-    // this line is to avoid a compile warning before your implementation is complete
-    // and may be removed
-    //command[count] = command[count];
 
 /*
  * TODO:
@@ -59,19 +56,21 @@ bool do_exec(int count, ...)
  *   as second argument to the execv() command.
  *
 */
-    __pid_t pid; 
+    pid_t pid; 
     int status; 
     fflush(stdout); 
     pid = fork();
     if (pid < 0) {
         perror("fork failed");
-        exit(EXIT_FAILURE);     
+        //exit(EXIT_FAILURE); 
+        return false;    
     }
     else if (pid == 0) { // fork() returns 0 in child process       
         printf("child process (PID : %d) executing command... \n", getpid());
         if (execv( command[0], command) == -1){
             perror("execv failed with error");
-            exit(EXIT_FAILURE);
+            //exit(EXIT_FAILURE);
+            return false;
         }
     }
     else {
@@ -79,7 +78,8 @@ bool do_exec(int count, ...)
         printf("Parent process (pid : %d) waiting for child to complete\n", getpid());
         if (waitpid(pid, &status, 0) == -1){
             perror("waitpid failed");
-            exit(EXIT_FAILURE);
+            //exit(EXIT_FAILURE);
+            return false;
         }
         if (WIFEXITED(status)){
             printf("Child exited with status: %d\n", WEXITSTATUS(status));
@@ -109,10 +109,6 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
         command[i] = va_arg(args, char *);
     }
     command[count] = NULL;
-    // this line is to avoid a compile warning before your implementation is complete
-    // and may be removed
-    //command[count] = command[count];
-
 
 /*
  * TODO
@@ -121,8 +117,43 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
  *   The rest of the behaviour is same as do_exec()
  *
 */
-
     va_end(args);
 
-    return true;
+    pid_t pid;
+    int fd = open(outputfile, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
+    //int fd = creat(output, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH); 
+    if (fd < 0) { 
+        perror("Open"); 
+        //abort();
+        return false;
+    }
+    if(dup2(fd, STDOUT_FILENO) == -1){
+        perror("dup2, redirect failed");
+        //abort();
+        close(fd);
+        return false;
+    }
+    close(fd);
+
+    fflush(stdout);
+    pid = fork();
+
+    if(pid < 0){
+        perror("fork");
+        //abort();
+        return false;
+    }
+    else if(pid == 0){
+        if(execv(command[0], command) == -1){
+            perror("execv failed");
+            return false; 
+        }
+    } else {
+        int status; 
+        if(waitpid(pid, &status, 0) == -1){
+            perror("waitpid failed");
+            return false;
+        }
+        return WIFEXITED(status) && WEXITSTATUS(status) == 0;
+    }
 }
