@@ -156,4 +156,5 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
         }
         return WIFEXITED(status) && WEXITSTATUS(status) == 0;
     }
+    return true; 
 }
