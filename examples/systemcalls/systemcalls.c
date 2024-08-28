@@ -57,7 +57,6 @@ bool do_exec(int count, ...)
  *
 */
     pid_t pid; 
-    int status; 
     fflush(stdout); 
     pid = fork();
     if (pid < 0) {
